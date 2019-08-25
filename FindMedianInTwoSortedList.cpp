@@ -33,6 +33,22 @@ double find_median(vector<int>& A, vector<int>& B)
         return 0.0;
     }
     
+    if ((m == 0) && (n != 0))
+    {
+        if (n == 1)
+        {
+            return B[0];
+        }
+
+        total_size = n;
+        j = (n + 1)/2;
+
+        left_val = B[j - 1];
+        right_val = B[j];
+
+        is_deduced = 1;
+    }
+
     min_index = 0;
     max_index = m;
     
@@ -41,7 +57,7 @@ double find_median(vector<int>& A, vector<int>& B)
     
     total_size = m + n;
     
-    if (m == 0)
+    if ((m == 0) && (j < n))
     {
         left_val  = B[j-1];
         right_val = B[j];
@@ -49,7 +65,7 @@ double find_median(vector<int>& A, vector<int>& B)
     
     while(min_index < max_index)
     {
-        if ((i > 1) && (A[i - 1] > B[j]))
+        if ((i >= 1) && (A[i - 1] > B[j]))
         {
             max_index = i;
             i = (min_index + max_index)/2;
@@ -65,8 +81,28 @@ double find_median(vector<int>& A, vector<int>& B)
         }
         else
         {
-            left_val = max(A[i - 1], B[j - 1]);
-            right_val = min(A[i], B[j]);
+            if (i >= 1)
+            {
+                left_val = max(A[i - 1], B[j - 1]);
+            }
+            else
+            {
+                left_val = B[j - 1];
+            }            
+            
+            if ((i < m) && (j < n))
+            {
+                right_val = min(A[i], B[j]);
+            }
+            else if (j >= n)
+            {
+                right_val = A[i];
+            }
+            else
+            {
+                right_val = B[j];
+            }            
+
             is_deduced = 1;
             break;
         }
@@ -78,6 +114,11 @@ double find_median(vector<int>& A, vector<int>& B)
         {
            left_val = max(A[i - 1], B[j - 1]);
         }
+        else if (i >= 1)
+        {
+            left_val = A[i - 1];
+        }
+        
         if ((i < max_index) && (j >= 0))
         {
             right_val = min(A[i], B[j]);
@@ -103,8 +144,8 @@ double find_median(vector<int>& A, vector<int>& B)
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, World! , this is my first xcode program...\n";
-    vector <int> listA{1, 3}; //{ 67}; //, 98, 100, 113, 280, 980};
-    vector <int> listB{2}; //{ 4, 59, 76, 84, 105, 124, 139, 156, 292}; //, 1240};
+    vector <int> listA{1, 2, 3}; //{ 67}; //, 98, 100, 113, 280, 980};
+    vector <int> listB{4, 5}; //{ 4, 59, 76, 84, 105, 124, 139, 156, 292}; //, 1240};
     
     double median = find_median(listB, listA);
     
